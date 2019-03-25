@@ -1,11 +1,5 @@
 #!/bin/sh -l
 
-if [ -z "$ACCESS_TOKEN" ]
-then
-  echo "You must provide the action with a GitHub Personal Access Token secret in order to deploy."
-  exit 1
-fi
-
 if [ -z "$BRANCH" ]
 then
   echo "You must provide the action with a branch name it should deploy to, for example gh-pages or docs."
@@ -40,8 +34,8 @@ git init && \
 git config --global user.email "${COMMIT_EMAIL}" && \
 git config --global user.name "${COMMIT_NAME}" && \
 
-## Initializes the repository path using the access token.
-REPOSITORY_PATH="https://${ACCESS_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" && \
+## Initializes the repository path using the Github token.
+REPOSITORY_PATH="https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" && \
 
 # Checks to see if the remote exists prior to deploying.
 # If the branch doesn't exist it gets created here as an orphan.
