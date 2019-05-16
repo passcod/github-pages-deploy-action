@@ -32,11 +32,6 @@ fi
 
 set -u
 
-# Install git
-export DEBIAN_FRONTEND=noninteractive
-apt-get update
-apt-get install -y git
-
 # Direct the action to the GitHub workspace
 cd "$GITHUB_WORKSPACE"
 
@@ -58,7 +53,7 @@ set -u
 # Take another checkout for the output
 git init --separate-git-dir source.git output
 cd output
-git checkout $BRANCH || git checkout --orphan $BRANCH
+git checkout $BRANCH || { git checkout --orphan $BRANCH && git commit --allow-empty -m 'Initial commit'; }
 cd ..
 
 # Run build process in source checkout
