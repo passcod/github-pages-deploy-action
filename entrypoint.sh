@@ -47,17 +47,9 @@ git init --separate-git-dir source.git source
 cd source
 set +u
 git checkout "$BASE_BRANCH" # <- if base branch is empty, will just checkout the default
-cd ..
 set -u
 
-# Take another checkout for the output
-git init --separate-git-dir source.git output
-cd output
-git checkout $BRANCH || { git checkout --orphan $BRANCH && git commit --allow-empty -m 'Initial commit'; }
-cd ..
-
-# Run build process in source checkout
-cd source
+# Run build process
 mkdir -p "$FOLDER"
 set +u
 eval "$BUILD_SCRIPT"
@@ -65,13 +57,15 @@ if [[ ! -z "$CNAME" ]]; then
   echo "$CNAME" > "$FOLDER/CNAME"
 fi
 set -u
-
-# Copy the data to the output checkout
 cd ..
-cp -a "source/$FOLDER/." output/
+
+# Take another checkout for the output
+git init --separate-git-dir source.git output
+cd output
+git checkout $BRANCH || { git checkout --orphan $BRANCH && git commit --allow-empty -m 'Initial commit'; }
+cp -a "../source/$FOLDER/." ./
 
 # Commit and push
-cd output
 git add -f .
 git commit -m "Deployment Bot (from GitHub Actions)"
 git push origin "$BRANCH"
