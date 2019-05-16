@@ -68,7 +68,7 @@ set -u
 
 # Copy the data to the output checkout
 cd ..
-cp -r "source/$FOLDER"/* "source/$FOLDER"/.* output/
+cp -a "source/$FOLDER/." output/
 
 # Commit and push
 cd output
