@@ -9,5 +9,8 @@ LABEL "repository"="http://github.com/JamesIves/gh-pages-github-action"
 LABEL "homepage"="http://github.com/JamesIves/gh-pages-gh-action"
 LABEL "maintainer"="James Ives <iam@jamesiv.es>"
 
+RUN npm i -g pnpm
+RUN apt update -y && apt install -y git jq
+
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
